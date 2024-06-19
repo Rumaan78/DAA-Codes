@@ -1,0 +1,46 @@
+#include <stdio.h>
+int main() {
+    int n, targetSum;
+    printf("Enter the number of elements in the set: ");
+    scanf("%d", &n);
+    int set[n];
+    printf("Enter the elements of the set:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &set[i]);
+    }
+    printf("Enter the target sum: ");
+    scanf("%d", &targetSum);
+    int stack[n * n][3 + n];
+    int top = -1;
+    stack[++top][0] = 0; 
+    stack[top][1] = 0;   
+    stack[top][2] = 0;  
+    while (top >= 0) {
+        int subsetSize = stack[top][0];
+        int total = stack[top][1];
+        int nodeCount = stack[top][2];
+        int subset[n];
+        for (int i = 0; i < subsetSize; i++) {
+            subset[i] = stack[top][3 + i];
+        }
+        top--;
+        if (total == targetSum) {
+            printf("Subset found: ");
+            for (int i = 0; i < subsetSize; i++) {
+                printf("%d ", subset[i]);
+            }
+            printf("\n");
+            continue;
+        }
+        for (int i = nodeCount; i < n; i++) {
+            stack[++top][0] = subsetSize + 1; 
+            stack[top][1] = total + set[i];  
+            stack[top][2] = i + 1;    
+            for (int j = 0; j < subsetSize; j++) {
+                stack[top][3 + j] = subset[j];
+            }
+            stack[top][3 + subsetSize] = set[i];
+        }
+    }
+    return 0;
+}
