@@ -1,0 +1,37 @@
+#include <stdio.h>
+int main() {
+    int n, i, j, mask, prev_mask, prev_cost;
+    int INF = 999999;
+    printf("Enter the number of cities: ");
+    scanf("%d", &n);
+    int dist[n][n];
+    printf("Enter the distance matrix:\n");
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &dist[i][j]);
+    int dp[1 << n][n];
+    for (mask = 0; mask < (1 << n); mask++)
+        for (i = 0; i < n; i++)
+            dp[mask][i] = INF;
+    dp[1][0] = 0;
+    for (mask = 1; mask < (1 << n); mask++) {
+        for (i = 0; i < n; i++) {
+            if (mask & (1 << i)) {
+                for (j = 0; j < n; j++) {
+                    if ((mask & (1 << j)) && i != j) {
+                        prev_mask = mask ^ (1 << i);
+                        prev_cost = dp[prev_mask][j] + dist[j][i];
+                        if (dp[mask][i] > prev_cost)
+                            dp[mask][i] = prev_cost;
+                    }
+                }
+            }
+        }
+    }
+    int result = INF;
+    for (i = 1; i < n; i++)
+        if (result > dp[(1 << n) - 1][i] + dist[i][0])
+            result = dp[(1 << n) - 1][i] + dist[i][0];
+    printf("The minimum cost is %d\n", result);
+    return 0;
+}
