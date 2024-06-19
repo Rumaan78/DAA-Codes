@@ -1,0 +1,52 @@
+#include <stdio.h>
+char board[8][8];
+int is_safe(int row, int col) {
+    for (int i = 0; i < col; i++) {
+        if (board[row][i] == 'Q')
+            return 0;
+    }
+    for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+        if (board[i][j] == 'Q')
+            return 0;
+    }
+    for (int i = row, j = col; i < 8 && j >= 0; i++, j--) {
+        if (board[i][j] == 'Q')
+            return 0;
+    }
+    return 1; 
+}
+int solve_queens(int col) {
+    if (col >= 8)
+        return 1; 
+    for (int i = 0; i < 8; i++) {
+        if (is_safe(i, col)) {
+            board[i][col] = 'Q'; 
+            if (solve_queens(col + 1))
+                return 1;
+            board[i][col] = '.';
+        }
+    }
+    return 0; 
+}
+void print_board() {
+    printf("Solution:\n");
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            printf("%c ", board[i][j]);
+        }
+        printf("\n");
+    }
+}
+int main() {
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            board[i][j] = '.';
+        }
+    }
+    if (solve_queens(0)) {
+        print_board();
+    } else {
+        printf("No solution exists\n");
+    }
+    return 0;
+}
