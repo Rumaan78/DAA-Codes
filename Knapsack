@@ -1,0 +1,43 @@
+#include <stdio.h>
+int main() {
+    int n, capacity, i, j;
+    printf("Enter the number of items:\n");
+    scanf("%d", &n);
+    float weight[n], profit[n], ratio[n];
+    printf("Enter the capacity:\n");
+    scanf("%d", &capacity);
+    printf("Enter the weight and profit of the items\n");
+    for (i = 0; i < n; i++) {
+        printf("Item %d - Weight: ", i + 1);
+        scanf("%f", &weight[i]);
+        printf("Item %d - Value: ", i + 1);
+        scanf("%f", &profit[i]);
+        ratio[i] = profit[i] / weight[i];
+    }
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (ratio[j] < ratio[j + 1]) {
+                float temp;
+                temp = ratio[j]; ratio[j] = ratio[j + 1]; ratio[j + 1] = temp;
+                temp = weight[j]; weight[j] = weight[j + 1]; weight[j + 1] = temp;
+                temp = profit[j]; profit[j] = profit[j + 1]; profit[j + 1] = temp;
+            }
+        }
+    }
+    float totalValue = 0.0;
+    printf("Items included in the knapsack:\n");
+    for (i = 0; i < n && capacity > 0; i++) {
+        if (weight[i] <= capacity) {
+            printf("Item %d: Weight = %.2f, Profit = %.2f\n", i + 1, weight[i], profit[i]);
+            capacity -= weight[i];
+            totalValue += profit[i];
+        } else {
+            float fraction = (float) capacity / weight[i];
+            printf("Item %d: Weight = %.2f (fraction = %.2f), Profit = %.2f (fraction = %.2f)\n", i + 1, weight[i], fraction, profit[i], profit[i] * fraction);
+            totalValue += profit[i] * fraction;
+            capacity = 0;
+        }
+    }
+    printf("The total value in the knapsack is: %.2f\n", totalValue);
+    return 0;
+}
