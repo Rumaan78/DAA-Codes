@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+int main() {
+    int N = 4; 
+    int cost[N][N], assigned[N] = {0}, minCost = 9999;
+    
+    printf("Enter the cost matrix (%d x %d):\n", N, N);
+    for (int i = 0; i < N*N; i++) {
+        scanf("%d", &cost[i/N][i%N]);
+    }
+    
+    for (int mask = 0; mask < (1 << N); mask++) {
+        int setBits = 0;
+        for (int i = 0; i < N; i++) {
+            if (mask & (1 << i)) {
+                setBits++;
+            }
+        }
+        
+        if (setBits != N) {
+            continue;
+        }
+        
+        int currentCost = 0;
+        int originalMask = mask; 
+        
+        for (int i = 0; i < N; i++) {
+            int assignedTask = -1;
+            for (int j = 0; j < N; j++) {
+                if (mask & (1 << j)) {
+                    assignedTask = j;
+                    mask &= ~(1 << j); 
+                    break;
+                }
+            }
+            currentCost += cost[i][assignedTask];
+            mask = originalMask; 
+        }
+        
+        if (currentCost < minCost) {
+            minCost = currentCost;
+        }
+    }
+    
+    printf("The minimum cost is: %d\n", minCost);
+    
+    return 0;
+}
