@@ -1,0 +1,32 @@
+#include <stdio.h>
+int main() {
+    int arr[100], n, m, nth, temp;
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
+    printf("Enter the elements of the array: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+    printf("Enter the value of m for m-th maximum: ");
+    scanf("%d", &m);
+    printf("Enter the value of n for n-th minimum: ");
+    scanf("%d", &nth);
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    int mth_max = arr[n - m]; 
+    int nth_min = arr[nth - 1]; 
+    int sum = mth_max + nth_min;
+    int difference = mth_max - nth_min;
+    printf("The %d-th maximum number is: %d\n", m, mth_max);
+    printf("The %d-th minimum number is: %d\n", nth, nth_min);
+    printf("Sum of %d-th maximum and %d-th minimum: %d\n", m, nth, sum);
+    printf("Difference of %d-th maximum and %d-th minimum: %d\n", m, nth, difference);
+    return 0;
+}
